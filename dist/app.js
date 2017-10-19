@@ -24,38 +24,47 @@ const retrieveKeys = () => {
 module.exports = {retrieveKeys};
 },{"./tmdb":5}],2:[function(require,module,exports){
 "use strict";
-const domString = (movieArray, imgConfig) => {
+
+// Temperature
+// Conditions
+// Air pressure
+// Wind speed
+// An affordance to view the forecast for the current day, the next three days, or the next 7 days
+
+const domString = (weatherArray) => {
 	let domString = '';
-	for(let i =0; i < movieArray.length; i++) {
+	for(let i =0; i < weatherArray.length; i++) {
 		if (i % 3 === 0){
 			domString += `<div class ="row">`;
 		}
 		
 	  	domString += `<div class="col-sm-6 col-md-4">`;
 	    domString += 	`<div class="thumbnail">`;
-	    domString +=	  `<img src="${imgConfig.base_url}/w342/${movieArray[i].poster_path}"
- alt="">`;
+	//     domString +=	  `<img src="${imgConfig.base_url}/w342/${movieArray[i].poster_path}"
+ // alt="">`;
 	    domString +=  `<div class="caption">`;
-	    domString +=    `<h3>${movieArray[i].original_title}</h3>`;
-	    domString +=    `<p>${movieArray[i].overview}</p>`;
-	    domString +=    `<p><a href="#" class="btn btn-primary" role="button">Review</a> <a href="#" class="btn btn-default" role="button">Watchlist</a></p>`;
+	    domString +=    `<h3>${weatherArray[i].name}</h3>`;
+	    domString +=    `<p>${weatherArray[i].temp}</p>`;
+	   	domString +=    `<p>${weatherArray[i].conditions}</p>`;
+	    domString +=    `<p>${weatherArray[i].pressure}</p>`;
+	    domString +=    `<p>${weatherArray[i].wind}</p>`;
+
+	    domString +=    `<p><a href="#" class="btn btn-primary" role="button">3 day forecast</a> <a href="#" class="btn btn-default" role="button">5 day forecast</a></p>`;
 	    domString +=  		`</div>`;
-	    domString += 	`</div>`;
 	  	domString +=  `</div>`;
-	  	if (i % 3 === 2 || i === movieArray.length -1) {
 		domString += `</div>`;
-		}
+		
 	}
 
 		printToDom(domString);
 };
 
 const printToDom = (strang) => {
-	$("#movies").append(strang);
+	$("#localWeather").append(strang);
 };
 
 const clearDom = () => {
-	$('#movies').empty();
+	$('#localWeather').empty();
 };
 
 
@@ -69,12 +78,23 @@ const pressEnter = () => {
 	$(document).keypress((e) => {
 		if (e.key === 'Enter'){
 			let searchText = $('#searchBar').val();
-			let query = searchText.replace(/\s/g, "%20");
-			tmdb.searchMovies(query);
+			let zip = searchText;
+			tmdb.searchOWM(zip);
 		}
 
 	});
 };
+
+const submitButton = () => {
+	$("#submitButton").click(() => {
+		let searchText = $('#searchBar').val();
+		let zip = searchText;
+		tmdb.searchOWM(zip);
+		
+	});
+
+};
+
 
 // document.getElementById('numbersonly').addEventListener('keydown', function(e) {
 //     var key   = e.keyCode ? e.keyCode : e.which;
@@ -87,79 +107,100 @@ const pressEnter = () => {
 //        )) e.preventDefault();
 // });
 
-module.exports = {pressEnter};
+module.exports = {pressEnter, submitButton};
 
 },{"./tmdb":5}],4:[function(require,module,exports){
 
 "use strict";
 
-let dom = require('./dom');
-
+// let dom = require('./dom');
+let tmdb = require('./tmdb');
 let events = require('./events');
 let apiKeys = require('./apiKeys');
 
 apiKeys.retrieveKeys();
 
+// $(document).click(() => {
+// 	tmdb.searchOWM(60439);
+// });
+
+
 events.pressEnter();
-},{"./apiKeys":1,"./dom":2,"./events":3}],5:[function(require,module,exports){
+events.submitButton();
+},{"./apiKeys":1,"./events":3,"./tmdb":5}],5:[function(require,module,exports){
 "use strict";
 
-let tmdbKey;
-let imgConfig;
+let owmKey;
+
 
 const dom = require('./dom');
 
+let now = [];
 
-const searchTMDB = (query) => {
+const searchOWM = (zip) => {
 	return new Promise((resolve, reject) => {
-		$.ajax(`https://api.themoviedb.org/3/search/movie?api_key=${tmdbKey}&language=en-US&page=1&include_adult=false&query=${query}`).done((data) => {
-			resolve(data.results);
-			console.log(data);
+		$.ajax(`http://api.openweathermap.org/data/2.5/weather?zip=${zip},us&APPID=${owmKey}&units=imperial`).done((data) => {
+			resolve(data.name, data.main.temp, data.weather[0].main, data.main.pressure, data.wind.speed);
+			let names = {
+				name: data.name,
+				temp: data.main.temp,
+				conditions: data.weather[0].main,
+				pressure: data.main.pressure,
+				wind: data.wind.speed				 
+			};
+			now.push(names);
+			showResults(now);
+			console.log(now);
 		}).fail((error) => {
 			reject(error);
 		});
 	});
 };
 
-const tmdbConfiruguration = () => {
-	return new Promise((resolve, reject) => {
-		$.ajax(`https://api.themoviedb.org/3/configuration?api_key=${tmdbKey}`).done((data) => {
-			resolve(data.images);
-		}).fail((error) => {
-			reject(error);
-		});
-	});
-};
+// const tmdbConfiruguration = () => {
+// 	return new Promise((resolve, reject) => {
+// 		$.ajax(`https://api.themoviedb.org/3/configuration?api_key=${tmdbKey}`).done((data) => {
+// 			resolve(data.images);
+// 		}).fail((error) => {
+// 			reject(error);
+// 		});
+// 	});
+// };
 
-const getConfig = () => {
-	tmdbConfiruguration().then((results) => {
-		imgConfig = results;
-		console.log(imgConfig);
-	}).catch((error) => {
-		console.log("error in getConfig", error);
-	});
-};
+// const getConfig = () => {
+// 	tmdbConfiruguration().then((results) => {
+// 		imgConfig = results;
+// 		console.log(imgConfig);
+// 	}).catch((error) => {
+// 		console.log("error in getConfig", error);
+// 	});
+// };
 
-const searchMovies = (query) => {
-	searchTMDB(query).then ((data) => {
-		showResults(data);
-	}).catch((error) => {
-		console.log("error in search Movies", error);
-	});
-};
+// const searchWeather = (zip) => {
+// 	searchOWM(zip).then ((data) => {
+// 		showResults(data);
+// 	}).catch((error) => {
+// 		console.log("error in search weather", error);
+// 	});
+// };
 
 const setKey = (apiKey) => {
-	tmdbKey = apiKey;
-	getConfig();
+	owmKey = apiKey;
+	console.log(owmKey);
+	// getConfig();
 };
 
-const showResults = (movieArray) => {
+const showResults = (weatherArray) => {
 	dom.clearDom();
- 	dom.domString(movieArray, imgConfig);
+ 	dom.domString(weatherArray);
 };
 
 
+module.exports = {setKey, searchOWM};
 
 
-module.exports = {setKey, searchMovies};
+
+
+
+
 },{"./dom":2}]},{},[4]);

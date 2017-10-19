@@ -6,12 +6,23 @@ const pressEnter = () => {
 	$(document).keypress((e) => {
 		if (e.key === 'Enter'){
 			let searchText = $('#searchBar').val();
-			let query = searchText.replace(/\s/g, "%20");
-			tmdb.searchMovies(query);
+			let zip = searchText;
+			tmdb.searchOWM(zip);
 		}
 
 	});
 };
+
+const submitButton = () => {
+	$("#submitButton").click(() => {
+		let searchText = $('#searchBar').val();
+		let zip = searchText;
+		tmdb.searchOWM(zip);
+		
+	});
+
+};
+
 
 // document.getElementById('numbersonly').addEventListener('keydown', function(e) {
 //     var key   = e.keyCode ? e.keyCode : e.which;
@@ -24,4 +35,4 @@ const pressEnter = () => {
 //        )) e.preventDefault();
 // });
 
-module.exports = {pressEnter};
+module.exports = {pressEnter, submitButton};
