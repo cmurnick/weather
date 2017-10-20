@@ -47,7 +47,7 @@ const domString = (weatherArray) => {
 	    domString +=    `<p>${weatherArray[i].temp}</p>`;
 	   	domString +=    `<p>${weatherArray[i].conditions}</p>`;
 	    domString +=    `<p>${weatherArray[i].pressure}</p>`;
-	    domString +=    `<p>${weatherArray[i].wind}</p>`;
+	    domString +=    `<p>${weatherArray[i].wind}mph</p>`;
 
 	    domString +=    `<p><a href="#" class="btn btn-primary" role="button">3 day forecast</a> <a href="#" class="btn btn-default" role="button">5 day forecast</a></p>`;
 	    domString +=  		`</div>`;
@@ -80,6 +80,7 @@ const pressEnter = () => {
 			let searchText = $('#searchBar').val();
 			let zip = searchText;
 			tmdb.searchOWM(zip);
+			tmdb.forecastConfiruguration(zip);
 		}
 
 	});
@@ -136,6 +137,7 @@ let owmKey;
 const dom = require('./dom');
 
 let now = [];
+let forecast = [];
 
 const searchOWM = (zip) => {
 	return new Promise((resolve, reject) => {
@@ -157,15 +159,22 @@ const searchOWM = (zip) => {
 	});
 };
 
-// const tmdbConfiruguration = () => {
-// 	return new Promise((resolve, reject) => {
-// 		$.ajax(`https://api.themoviedb.org/3/configuration?api_key=${tmdbKey}`).done((data) => {
-// 			resolve(data.images);
-// 		}).fail((error) => {
-// 			reject(error);
-// 		});
-// 	});
-// };
+const forecastConfiruguration = (zip) => {
+	return new Promise((resolve, reject) => {
+		$.ajax(`http://api.openweathermap.org/data/2.5/forecast?zip=${zip},us&APPID=${owmKey}&units=imperial`).done((data) => {
+			resolve(data.list);
+			// let future = {
+			// 	date: data.forecast[0].list
+			// };
+			// forecast.push(future);
+			// console.log(forecast);
+			// forecast.time.from.getDay(0) and then (2)
+			console.log(data.list);
+		}).fail((error) => {
+			reject(error);
+		});
+	});
+};
 
 // const getConfig = () => {
 // 	tmdbConfiruguration().then((results) => {
@@ -196,7 +205,7 @@ const showResults = (weatherArray) => {
 };
 
 
-module.exports = {setKey, searchOWM};
+module.exports = {setKey, searchOWM, forecastConfiruguration};
 
 
 

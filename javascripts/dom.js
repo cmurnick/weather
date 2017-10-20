@@ -22,7 +22,7 @@ const domString = (weatherArray) => {
 	    domString +=    `<p>${weatherArray[i].temp}</p>`;
 	   	domString +=    `<p>${weatherArray[i].conditions}</p>`;
 	    domString +=    `<p>${weatherArray[i].pressure}</p>`;
-	    domString +=    `<p>${weatherArray[i].wind}</p>`;
+	    domString +=    `<p>${weatherArray[i].wind}mph</p>`;
 
 	    domString +=    `<p><a href="#" class="btn btn-primary" role="button">3 day forecast</a> <a href="#" class="btn btn-default" role="button">5 day forecast</a></p>`;
 	    domString +=  		`</div>`;

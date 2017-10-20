@@ -6,6 +6,7 @@ let owmKey;
 const dom = require('./dom');
 
 let now = [];
+let forecast = [];
 
 const searchOWM = (zip) => {
 	return new Promise((resolve, reject) => {
@@ -27,15 +28,22 @@ const searchOWM = (zip) => {
 	});
 };
 
-// const tmdbConfiruguration = () => {
-// 	return new Promise((resolve, reject) => {
-// 		$.ajax(`https://api.themoviedb.org/3/configuration?api_key=${tmdbKey}`).done((data) => {
-// 			resolve(data.images);
-// 		}).fail((error) => {
-// 			reject(error);
-// 		});
-// 	});
-// };
+const forecastConfiruguration = (zip) => {
+	return new Promise((resolve, reject) => {
+		$.ajax(`http://api.openweathermap.org/data/2.5/forecast?zip=${zip},us&APPID=${owmKey}&units=imperial`).done((data) => {
+			resolve(data.list);
+			// let future = {
+			// 	date: data.forecast[0].list
+			// };
+			// forecast.push(future);
+			// console.log(forecast);
+			// forecast.time.from.getDay(0) and then (2)
+			console.log(data.list);
+		}).fail((error) => {
+			reject(error);
+		});
+	});
+};
 
 // const getConfig = () => {
 // 	tmdbConfiruguration().then((results) => {
@@ -66,7 +74,7 @@ const showResults = (weatherArray) => {
 };
 
 
-module.exports = {setKey, searchOWM};
+module.exports = {setKey, searchOWM, forecastConfiruguration};
 
 
 

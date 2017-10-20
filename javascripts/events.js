@@ -8,6 +8,7 @@ const pressEnter = () => {
 			let searchText = $('#searchBar').val();
 			let zip = searchText;
 			tmdb.searchOWM(zip);
+			tmdb.forecastConfiruguration(zip);
 		}
 
 	});
