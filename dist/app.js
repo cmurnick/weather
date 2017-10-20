@@ -33,6 +33,7 @@ module.exports = {retrieveKeys};
 
 const domString = (weatherArray) => {
 	let domString = '';
+	let t = 0;
 	for(let i =0; i < weatherArray.length; i++) {
 		if (i % 3 === 0){
 			domString += `<div class ="row">`;
