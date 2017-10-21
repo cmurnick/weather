@@ -25,6 +25,7 @@ module.exports = {retrieveKeys};
 },{"./tmdb":5}],2:[function(require,module,exports){
 "use strict";
 
+const tmdb = require('./tmdb');
 // Temperature
 // Conditions
 // Air pressure
@@ -33,14 +34,14 @@ module.exports = {retrieveKeys};
 
 const domString = (weatherArray) => {
 	let domString = '';
-	let t = 0;
+	
 	for(let i =0; i < weatherArray.length; i++) {
-		if (i % 3 === 0){
+		// if (i % 3 === 0){
 			domString += `<div class ="row">`;
-		}
+		// }
 		
-	  	domString += `<div class="col-sm-6 col-md-4">`;
-	    domString += 	`<div class="thumbnail">`;
+	  	domString += `<div class="col-md-4 col-md-offset-4">`;
+	    domString += 	`<div class = "thumbnail">`;
 	//     domString +=	  `<img src="${imgConfig.base_url}/w342/${movieArray[i].poster_path}"
  // alt="">`;
 	    domString +=  `<div class="caption">`;
@@ -49,15 +50,14 @@ const domString = (weatherArray) => {
 	   	domString +=    `<p>${weatherArray[i].conditions}</p>`;
 	    domString +=    `<p>${weatherArray[i].pressure}</p>`;
 	    domString +=    `<p>${weatherArray[i].wind}mph</p>`;
-
-	    domString +=    `<p><a href="#" class="btn btn-primary" role="button">3 day forecast</a> <a href="#" class="btn btn-default" role="button">5 day forecast</a></p>`;
-	    domString +=  		`</div>`;
+	    domString +=  	`</div>`;
 	  	domString +=  `</div>`;
 		domString += `</div>`;
 		
 	}
 
 		printToDom(domString);
+		
 };
 
 const printToDom = (strang) => {
@@ -68,12 +68,46 @@ const clearDom = () => {
 	$('#localWeather').empty();
 };
 
+const fiveForecast = (forecastArray) => {
+	let domString = '';
+	let t = 0;
+	for(let i =0; i < forecastArray.length; i++) {
+		if (i % 3 === 0){
+			domString += `<div class ="row">`;
+		}		
+		
+	  	domString += `<div class="col-sm-6 col-md-4">`;
+	    domString += 	`<div class="thumbnail">`;
+	    domString +=	  
+	    domString +=  `<div class="caption">`;
+	    domString +=    `<h3>${forecastArray[i].main.temp}</h3>`;
+	    domString +=    `<p>${forecastArray[i].weather.main}</p>`;
+	    domString +=  		`</div>`;
+	    domString += 	`</div>`;
+	  	domString +=  `</div>`;
+	  	if (i % 3 === 2 || i === forecastArray.length -1) {
+		domString += `</div>`;
+		}
+	}
+		// printToDom2(domString);
+		console.log(domString);
 
-module.exports = {domString, clearDom};
-},{}],3:[function(require,module,exports){
+};
+
+
+
+
+
+
+
+
+
+module.exports = {domString, clearDom, fiveForecast};
+},{"./tmdb":5}],3:[function(require,module,exports){
 "use strict";
 
 const tmdb = require('./tmdb');
+const dom = require('./dom');
 
 const pressEnter = () => {
 	$(document).keypress((e) => {
@@ -92,26 +126,28 @@ const submitButton = () => {
 		let searchText = $('#searchBar').val();
 		let zip = searchText;
 		tmdb.searchOWM(zip);
-		
+		tmdb.forecastConfiruguration(zip);
 	});
 
 };
 
 
-// document.getElementById('numbersonly').addEventListener('keydown', function(e) {
-//     var key   = e.keyCode ? e.keyCode : e.which;
+const fiveDayForecast = () => {
+	$("#five").click(() => {
+		console.log("fuck");
+		let searchText = $('#searchBar').val();
+		let zip = searchText;
+		console.log("zip");
+		dom.fiveForecast();
 
-//     if (!( [8, 9, 13, 27, 46, 110, 190].indexOf(key) !== -1 ||
-//          (key == 65 && ( e.ctrlKey || e.metaKey  ) ) || 
-//          (key >= 35 && key <= 40) ||
-//          (key >= 48 && key <= 57 && !(e.shiftKey || e.altKey)) ||
-//          (key >= 96 && key <= 105)
-//        )) e.preventDefault();
-// });
+	});
+};
 
-module.exports = {pressEnter, submitButton};
 
-},{"./tmdb":5}],4:[function(require,module,exports){
+
+module.exports = {pressEnter, submitButton, fiveDayForecast};
+
+},{"./dom":2,"./tmdb":5}],4:[function(require,module,exports){
 
 "use strict";
 
@@ -129,6 +165,7 @@ apiKeys.retrieveKeys();
 
 events.pressEnter();
 events.submitButton();
+events.fiveDayForecast();
 },{"./apiKeys":1,"./events":3,"./tmdb":5}],5:[function(require,module,exports){
 "use strict";
 
@@ -164,12 +201,6 @@ const forecastConfiruguration = (zip) => {
 	return new Promise((resolve, reject) => {
 		$.ajax(`http://api.openweathermap.org/data/2.5/forecast?zip=${zip},us&APPID=${owmKey}&units=imperial`).done((data) => {
 			resolve(data.list);
-			// let future = {
-			// 	date: data.forecast[0].list
-			// };
-			// forecast.push(future);
-			// console.log(forecast);
-			// forecast.time.from.getDay(0) and then (2)
 			console.log(data.list);
 		}).fail((error) => {
 			reject(error);
@@ -177,14 +208,14 @@ const forecastConfiruguration = (zip) => {
 	});
 };
 
-// const getConfig = () => {
-// 	tmdbConfiruguration().then((results) => {
-// 		imgConfig = results;
-// 		console.log(imgConfig);
-// 	}).catch((error) => {
-// 		console.log("error in getConfig", error);
-// 	});
-// };
+const getConfig = () => {
+	forecastConfiruguration().then((results) => {
+		forecast = results;
+		console.log(forecast);
+	}).catch((error) => {
+		console.log("error in getConfig", error);
+	});
+};
 
 // const searchWeather = (zip) => {
 // 	searchOWM(zip).then ((data) => {
@@ -197,7 +228,7 @@ const forecastConfiruguration = (zip) => {
 const setKey = (apiKey) => {
 	owmKey = apiKey;
 	console.log(owmKey);
-	// getConfig();
+	getConfig();
 };
 
 const showResults = (weatherArray) => {

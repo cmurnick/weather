@@ -32,12 +32,6 @@ const forecastConfiruguration = (zip) => {
 	return new Promise((resolve, reject) => {
 		$.ajax(`http://api.openweathermap.org/data/2.5/forecast?zip=${zip},us&APPID=${owmKey}&units=imperial`).done((data) => {
 			resolve(data.list);
-			// let future = {
-			// 	date: data.forecast[0].list
-			// };
-			// forecast.push(future);
-			// console.log(forecast);
-			// forecast.time.from.getDay(0) and then (2)
 			console.log(data.list);
 		}).fail((error) => {
 			reject(error);
@@ -45,14 +39,14 @@ const forecastConfiruguration = (zip) => {
 	});
 };
 
-// const getConfig = () => {
-// 	tmdbConfiruguration().then((results) => {
-// 		imgConfig = results;
-// 		console.log(imgConfig);
-// 	}).catch((error) => {
-// 		console.log("error in getConfig", error);
-// 	});
-// };
+const getConfig = () => {
+	forecastConfiruguration().then((results) => {
+		forecast = results;
+		console.log(forecast);
+	}).catch((error) => {
+		console.log("error in getConfig", error);
+	});
+};
 
 // const searchWeather = (zip) => {
 // 	searchOWM(zip).then ((data) => {
@@ -65,7 +59,7 @@ const forecastConfiruguration = (zip) => {
 const setKey = (apiKey) => {
 	owmKey = apiKey;
 	console.log(owmKey);
-	// getConfig();
+	getConfig();
 };
 
 const showResults = (weatherArray) => {
