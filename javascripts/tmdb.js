@@ -28,25 +28,25 @@ const searchOWM = (zip) => {
 	});
 };
 
-const forecastConfiruguration = (zip) => {
+const getForecast = (zip) => {
 	return new Promise((resolve, reject) => {
 		$.ajax(`http://api.openweathermap.org/data/2.5/forecast?zip=${zip},us&APPID=${owmKey}&units=imperial`).done((data) => {
 			resolve(data.list);
-			console.log(data.list);
+			// console.log(data.list);
 		}).fail((error) => {
 			reject(error);
 		});
 	});
 };
 
-const getConfig = () => {
-	forecastConfiruguration().then((results) => {
-		forecast = results;
-		console.log(forecast);
-	}).catch((error) => {
-		console.log("error in getConfig", error);
-	});
-};
+// const getConfig = () => {
+// 	forecastConfiruguration().then((results) => {
+// 		forecast = results;
+// 		console.log(forecast);
+// 	}).catch((error) => {
+// 		console.log("error in getConfig", error);
+// 	});
+// };
 
 // const searchWeather = (zip) => {
 // 	searchOWM(zip).then ((data) => {
@@ -59,7 +59,7 @@ const getConfig = () => {
 const setKey = (apiKey) => {
 	owmKey = apiKey;
 	console.log(owmKey);
-	getConfig();
+	// getConfig();
 };
 
 const showResults = (weatherArray) => {
@@ -68,7 +68,7 @@ const showResults = (weatherArray) => {
 };
 
 
-module.exports = {setKey, searchOWM, forecastConfiruguration};
+module.exports = {setKey, searchOWM, getForecast};
 
 
 

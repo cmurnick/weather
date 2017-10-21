@@ -9,7 +9,7 @@ const pressEnter = () => {
 			let searchText = $('#searchBar').val();
 			let zip = searchText;
 			tmdb.searchOWM(zip);
-			tmdb.forecastConfiruguration(zip);
+			
 		}
 
 	});
@@ -20,7 +20,7 @@ const submitButton = () => {
 		let searchText = $('#searchBar').val();
 		let zip = searchText;
 		tmdb.searchOWM(zip);
-		tmdb.forecastConfiruguration(zip);
+		
 	});
 
 };
@@ -28,11 +28,17 @@ const submitButton = () => {
 
 const fiveDayForecast = () => {
 	$("#five").click(() => {
-		console.log("fuck");
+		console.log("works");
 		let searchText = $('#searchBar').val();
 		let zip = searchText;
+		tmdb.getForecast(zip).then((results) => {
+		console.log(results);
+		dom.fiveForecast(results);
+	}).catch((error) => {
+		console.log("error in getConfig from fiveDayForecast", error);
+	});
 		console.log("zip");
-		dom.fiveForecast();
+		
 
 	});
 };

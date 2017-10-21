@@ -25,7 +25,7 @@ module.exports = {retrieveKeys};
 },{"./tmdb":5}],2:[function(require,module,exports){
 "use strict";
 
-const tmdb = require('./tmdb');
+// const tmdb = require('./tmdb');
 // Temperature
 // Conditions
 // Air pressure
@@ -69,28 +69,33 @@ const clearDom = () => {
 };
 
 const fiveForecast = (forecastArray) => {
-	let domString = '';
-	let t = 0;
+	console.log("from dom", forecastArray.length);
+	let forString = '';
+	// let t = 0;
 	for(let i =0; i < forecastArray.length; i++) {
+		// console.log("from for loop",);
+		
+
 		if (i % 3 === 0){
-			domString += `<div class ="row">`;
+			forString += `<div class ="row">`;
 		}		
 		
-	  	domString += `<div class="col-sm-6 col-md-4">`;
-	    domString += 	`<div class="thumbnail">`;
-	    domString +=	  
-	    domString +=  `<div class="caption">`;
-	    domString +=    `<h3>${forecastArray[i].main.temp}</h3>`;
-	    domString +=    `<p>${forecastArray[i].weather.main}</p>`;
-	    domString +=  		`</div>`;
-	    domString += 	`</div>`;
-	  	domString +=  `</div>`;
+	  	forString += `<div class="col-sm-6 col-md-4">`;
+	    forString += 	`<div class="thumbnail">`;  
+	    forString +=  `<div class="caption">`;
+	    // forString +=    `<h3>${forecastArray[i].main.temp}</h3>`;
+	    forString +=    `<p>${forecastArray[i].weather[0].main}</p>`;
+	    forString +=  `</div>`;
+	    forString += 	`</div>`;
+	  	forString +=  `</div>`;
 	  	if (i % 3 === 2 || i === forecastArray.length -1) {
-		domString += `</div>`;
+		forString += `</div>`;
+
+			
 		}
 	}
-		// printToDom2(domString);
-		console.log(domString);
+	// 	// printToDom2(domString);
+		console.log(forString);
 
 };
 
@@ -103,7 +108,7 @@ const fiveForecast = (forecastArray) => {
 
 
 module.exports = {domString, clearDom, fiveForecast};
-},{"./tmdb":5}],3:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 "use strict";
 
 const tmdb = require('./tmdb');
@@ -115,7 +120,7 @@ const pressEnter = () => {
 			let searchText = $('#searchBar').val();
 			let zip = searchText;
 			tmdb.searchOWM(zip);
-			tmdb.forecastConfiruguration(zip);
+			
 		}
 
 	});
@@ -126,7 +131,7 @@ const submitButton = () => {
 		let searchText = $('#searchBar').val();
 		let zip = searchText;
 		tmdb.searchOWM(zip);
-		tmdb.forecastConfiruguration(zip);
+		
 	});
 
 };
@@ -134,11 +139,17 @@ const submitButton = () => {
 
 const fiveDayForecast = () => {
 	$("#five").click(() => {
-		console.log("fuck");
+		console.log("works");
 		let searchText = $('#searchBar').val();
 		let zip = searchText;
+		tmdb.getForecast(zip).then((results) => {
+		console.log(results);
+		dom.fiveForecast(results);
+	}).catch((error) => {
+		console.log("error in getConfig from fiveDayForecast", error);
+	});
 		console.log("zip");
-		dom.fiveForecast();
+		
 
 	});
 };
@@ -197,25 +208,25 @@ const searchOWM = (zip) => {
 	});
 };
 
-const forecastConfiruguration = (zip) => {
+const getForecast = (zip) => {
 	return new Promise((resolve, reject) => {
 		$.ajax(`http://api.openweathermap.org/data/2.5/forecast?zip=${zip},us&APPID=${owmKey}&units=imperial`).done((data) => {
 			resolve(data.list);
-			console.log(data.list);
+			// console.log(data.list);
 		}).fail((error) => {
 			reject(error);
 		});
 	});
 };
 
-const getConfig = () => {
-	forecastConfiruguration().then((results) => {
-		forecast = results;
-		console.log(forecast);
-	}).catch((error) => {
-		console.log("error in getConfig", error);
-	});
-};
+// const getConfig = () => {
+// 	forecastConfiruguration().then((results) => {
+// 		forecast = results;
+// 		console.log(forecast);
+// 	}).catch((error) => {
+// 		console.log("error in getConfig", error);
+// 	});
+// };
 
 // const searchWeather = (zip) => {
 // 	searchOWM(zip).then ((data) => {
@@ -228,7 +239,7 @@ const getConfig = () => {
 const setKey = (apiKey) => {
 	owmKey = apiKey;
 	console.log(owmKey);
-	getConfig();
+	// getConfig();
 };
 
 const showResults = (weatherArray) => {
@@ -237,7 +248,7 @@ const showResults = (weatherArray) => {
 };
 
 
-module.exports = {setKey, searchOWM, forecastConfiruguration};
+module.exports = {setKey, searchOWM, getForecast};
 
 
 
