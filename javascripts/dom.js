@@ -43,33 +43,40 @@ const clearDom = () => {
 	$('#localWeather').empty();
 };
 
+const printToDom2 = (strang) => {
+	$("#futureForecast").append(strang);
+};
+
 const fiveForecast = (forecastArray) => {
 	console.log("from dom", forecastArray.length);
 	let forString = '';
 	// let t = 0;
 	for(let i =0; i < forecastArray.length; i++) {
-		// console.log("from for loop",);
-		
+		console.log("from for loop", forecastArray);
+	if (i && (i % 3 === 0)){
 
-		if (i % 3 === 0){
-			forString += `<div class ="row">`;
-		}		
+		// if (i % 3 === 0){
+		// 	forString += `<div class ="row">`;
+		// }		
 		
-	  	forString += `<div class="col-sm-6 col-md-4">`;
+	  	forString += `<div class="col-sm-6 col-md-4 ">`;
 	    forString += 	`<div class="thumbnail">`;  
 	    forString +=  `<div class="caption">`;
-	    // forString +=    `<h3>${forecastArray[i].main.temp}</h3>`;
-	    forString +=    `<p>${forecastArray[i].weather[0].main}</p>`;
+	    forString += 	`<p>${forecastArray[i].dt_txt.split(" ")}`;
+	    forString +=    `<p>${forecastArray[i].main.temp}</p>`;
+	    forString +=    `<p>${forecastArray[i].weather[0].description}</p>`;
+	    forString +=  `</div>`;
 	    forString +=  `</div>`;
 	    forString += 	`</div>`;
-	  	forString +=  `</div>`;
+	  	// forString +=  `</div>`;
 	  	if (i % 3 === 2 || i === forecastArray.length -1) {
 		forString += `</div>`;
-
+}
+}
 			
-		}
+		
 	}
-	// 	// printToDom2(domString);
+		printToDom2(forString);
 		console.log(forString);
 
 };

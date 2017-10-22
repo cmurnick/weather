@@ -34,6 +34,7 @@ const fiveDayForecast = () => {
 		tmdb.getForecast(zip).then((results) => {
 		console.log(results);
 		dom.fiveForecast(results);
+		
 	}).catch((error) => {
 		console.log("error in getConfig from fiveDayForecast", error);
 	});
