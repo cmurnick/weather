@@ -1,6 +1,7 @@
 "use strict";
 
 const tmdb = require('./tmdb');
+const dom = require('./dom');
 
 const pressEnter = () => {
 	$(document).keypress((e) => {
@@ -8,6 +9,7 @@ const pressEnter = () => {
 			let searchText = $('#searchBar').val();
 			let zip = searchText;
 			tmdb.searchOWM(zip);
+			
 		}
 
 	});
@@ -24,15 +26,24 @@ const submitButton = () => {
 };
 
 
-// document.getElementById('numbersonly').addEventListener('keydown', function(e) {
-//     var key   = e.keyCode ? e.keyCode : e.which;
+const fiveDayForecast = () => {
+	$("#five").click(() => {
+		console.log("works");
+		let searchText = $('#searchBar').val();
+		let zip = searchText;
+		tmdb.getForecast(zip).then((results) => {
+		console.log(results);
+		dom.fiveForecast(results);
+		
+	}).catch((error) => {
+		console.log("error in getConfig from fiveDayForecast", error);
+	});
+		console.log("zip");
+		
 
-//     if (!( [8, 9, 13, 27, 46, 110, 190].indexOf(key) !== -1 ||
-//          (key == 65 && ( e.ctrlKey || e.metaKey  ) ) || 
-//          (key >= 35 && key <= 40) ||
-//          (key >= 48 && key <= 57 && !(e.shiftKey || e.altKey)) ||
-//          (key >= 96 && key <= 105)
-//        )) e.preventDefault();
-// });
+	});
+};
 
-module.exports = {pressEnter, submitButton};
+
+
+module.exports = {pressEnter, submitButton, fiveDayForecast};

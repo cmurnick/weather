@@ -25,6 +25,7 @@ module.exports = {retrieveKeys};
 },{"./tmdb":5}],2:[function(require,module,exports){
 "use strict";
 
+// const tmdb = require('./tmdb');
 // Temperature
 // Conditions
 // Air pressure
@@ -33,13 +34,14 @@ module.exports = {retrieveKeys};
 
 const domString = (weatherArray) => {
 	let domString = '';
+	
 	for(let i =0; i < weatherArray.length; i++) {
-		if (i % 3 === 0){
+		// if (i % 3 === 0){
 			domString += `<div class ="row">`;
-		}
+		// }
 		
-	  	domString += `<div class="col-sm-6 col-md-4">`;
-	    domString += 	`<div class="thumbnail">`;
+	  	domString += `<div class="col-md-4 col-md-offset-4">`;
+	    domString += 	`<div class = "thumbnail">`;
 	//     domString +=	  `<img src="${imgConfig.base_url}/w342/${movieArray[i].poster_path}"
  // alt="">`;
 	    domString +=  `<div class="caption">`;
@@ -47,16 +49,15 @@ const domString = (weatherArray) => {
 	    domString +=    `<p>${weatherArray[i].temp}</p>`;
 	   	domString +=    `<p>${weatherArray[i].conditions}</p>`;
 	    domString +=    `<p>${weatherArray[i].pressure}</p>`;
-	    domString +=    `<p>${weatherArray[i].wind}</p>`;
-
-	    domString +=    `<p><a href="#" class="btn btn-primary" role="button">3 day forecast</a> <a href="#" class="btn btn-default" role="button">5 day forecast</a></p>`;
-	    domString +=  		`</div>`;
+	    domString +=    `<p>${weatherArray[i].wind}mph</p>`;
+	    domString +=  	`</div>`;
 	  	domString +=  `</div>`;
 		domString += `</div>`;
 		
 	}
 
 		printToDom(domString);
+		
 };
 
 const printToDom = (strang) => {
@@ -67,12 +68,63 @@ const clearDom = () => {
 	$('#localWeather').empty();
 };
 
+const printToDom2 = (strang) => {
+	$("#futureForecast").append(strang);
+};
 
-module.exports = {domString, clearDom};
+const fiveForecast = (forecastArray) => {
+	console.log("from dom", forecastArray.length);
+	let forString = '';
+	
+	for(let i =0; i < forecastArray.length; i++) {
+		console.log("from for loop", forecastArray);
+		var d = new Date();
+		var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+		document.getElementById("futureForecast").innerHTML = days[d.getDay()];
+		let date = forecastArray[i].dt_txt.slice(0, 10);
+
+		if (i % 3 === 0){
+			forString += `<div class ="row">`;
+		}		
+		forString += `<div class="col-sm-6 col-md-4 ">`;
+	    forString += 	`<div class="thumbnail">`;  
+	    forString +=  		`<div class="caption">`;
+	    forString += 			`<p>${date}</p>`;
+	    forString += 		 `</div>`;
+	    forString +=  	`</div>`;
+	    forString +=  `</div>`;
+	  	
+	//     forString +=    `<p>${t}</p>`;
+	//     forString +=  `</div>`;
+	//     forString +=  `</div>`;
+	// // }
+	  	// forString +=  `</div>`;
+	  	if (i % 3 === 2 || i === forecastArray.length -1) {
+		forString += `</div>`;
+
+}
+			
+		
+	}
+		printToDom2(forString);
+		console.log(forString);
+
+};
+
+
+
+
+
+
+
+
+
+module.exports = {domString, clearDom, fiveForecast};
 },{}],3:[function(require,module,exports){
 "use strict";
 
 const tmdb = require('./tmdb');
+const dom = require('./dom');
 
 const pressEnter = () => {
 	$(document).keypress((e) => {
@@ -80,6 +132,7 @@ const pressEnter = () => {
 			let searchText = $('#searchBar').val();
 			let zip = searchText;
 			tmdb.searchOWM(zip);
+			
 		}
 
 	});
@@ -96,20 +149,30 @@ const submitButton = () => {
 };
 
 
-// document.getElementById('numbersonly').addEventListener('keydown', function(e) {
-//     var key   = e.keyCode ? e.keyCode : e.which;
+const fiveDayForecast = () => {
+	$("#five").click(() => {
+		console.log("works");
+		let searchText = $('#searchBar').val();
+		let zip = searchText;
+		tmdb.getForecast(zip).then((results) => {
+		console.log(results);
+		
+		dom.fiveForecast(results);
+		
+	}).catch((error) => {
+		console.log("error in getConfig from fiveDayForecast", error);
+	});
+		console.log("zip");
+		
 
-//     if (!( [8, 9, 13, 27, 46, 110, 190].indexOf(key) !== -1 ||
-//          (key == 65 && ( e.ctrlKey || e.metaKey  ) ) || 
-//          (key >= 35 && key <= 40) ||
-//          (key >= 48 && key <= 57 && !(e.shiftKey || e.altKey)) ||
-//          (key >= 96 && key <= 105)
-//        )) e.preventDefault();
-// });
+	});
+};
 
-module.exports = {pressEnter, submitButton};
 
-},{"./tmdb":5}],4:[function(require,module,exports){
+
+module.exports = {pressEnter, submitButton, fiveDayForecast};
+
+},{"./dom":2,"./tmdb":5}],4:[function(require,module,exports){
 
 "use strict";
 
@@ -127,6 +190,7 @@ apiKeys.retrieveKeys();
 
 events.pressEnter();
 events.submitButton();
+events.fiveDayForecast();
 },{"./apiKeys":1,"./events":3,"./tmdb":5}],5:[function(require,module,exports){
 "use strict";
 
@@ -136,6 +200,7 @@ let owmKey;
 const dom = require('./dom');
 
 let now = [];
+let forecast = [];
 
 const searchOWM = (zip) => {
 	return new Promise((resolve, reject) => {
@@ -157,20 +222,21 @@ const searchOWM = (zip) => {
 	});
 };
 
-// const tmdbConfiruguration = () => {
-// 	return new Promise((resolve, reject) => {
-// 		$.ajax(`https://api.themoviedb.org/3/configuration?api_key=${tmdbKey}`).done((data) => {
-// 			resolve(data.images);
-// 		}).fail((error) => {
-// 			reject(error);
-// 		});
-// 	});
-// };
+const getForecast = (zip) => {
+	return new Promise((resolve, reject) => {
+		$.ajax(`http://api.openweathermap.org/data/2.5/forecast?zip=${zip},us&APPID=${owmKey}&units=imperial`).done((data) => {
+			resolve(data.list);
+			// console.log(data.list);
+		}).fail((error) => {
+			reject(error);
+		});
+	});
+};
 
 // const getConfig = () => {
-// 	tmdbConfiruguration().then((results) => {
-// 		imgConfig = results;
-// 		console.log(imgConfig);
+// 	forecastConfiruguration().then((results) => {
+// 		forecast = results;
+// 		console.log(forecast);
 // 	}).catch((error) => {
 // 		console.log("error in getConfig", error);
 // 	});
@@ -196,7 +262,7 @@ const showResults = (weatherArray) => {
 };
 
 
-module.exports = {setKey, searchOWM};
+module.exports = {setKey, searchOWM, getForecast};
 
 
 

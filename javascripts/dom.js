@@ -1,5 +1,6 @@
 "use strict";
 
+// const tmdb = require('./tmdb');
 // Temperature
 // Conditions
 // Air pressure
@@ -8,13 +9,14 @@
 
 const domString = (weatherArray) => {
 	let domString = '';
+	
 	for(let i =0; i < weatherArray.length; i++) {
-		if (i % 3 === 0){
+		// if (i % 3 === 0){
 			domString += `<div class ="row">`;
-		}
+		// }
 		
-	  	domString += `<div class="col-sm-6 col-md-4">`;
-	    domString += 	`<div class="thumbnail">`;
+	  	domString += `<div class="col-md-4 col-md-offset-4">`;
+	    domString += 	`<div class = "thumbnail">`;
 	//     domString +=	  `<img src="${imgConfig.base_url}/w342/${movieArray[i].poster_path}"
  // alt="">`;
 	    domString +=  `<div class="caption">`;
@@ -22,16 +24,15 @@ const domString = (weatherArray) => {
 	    domString +=    `<p>${weatherArray[i].temp}</p>`;
 	   	domString +=    `<p>${weatherArray[i].conditions}</p>`;
 	    domString +=    `<p>${weatherArray[i].pressure}</p>`;
-	    domString +=    `<p>${weatherArray[i].wind}</p>`;
-
-	    domString +=    `<p><a href="#" class="btn btn-primary" role="button">3 day forecast</a> <a href="#" class="btn btn-default" role="button">5 day forecast</a></p>`;
-	    domString +=  		`</div>`;
+	    domString +=    `<p>${weatherArray[i].wind}mph</p>`;
+	    domString +=  	`</div>`;
 	  	domString +=  `</div>`;
 		domString += `</div>`;
 		
 	}
 
 		printToDom(domString);
+		
 };
 
 const printToDom = (strang) => {
@@ -42,5 +43,63 @@ const clearDom = () => {
 	$('#localWeather').empty();
 };
 
+const printToDom2 = (strang) => {
+	$("#futureForecast").append(strang);
+};
 
-module.exports = {domString, clearDom};
+const fiveForecast = (forecastArray) => {
+	console.log("from dom", forecastArray.length);
+	let forString = '';
+	
+	for(let i =0; i < forecastArray.length; i++) {
+		console.log("from for loop", forecastArray);
+		var d = new Date();
+		var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+		document.getElementById("futureForecast").innerHTML = days[d.getDay()];
+		
+		
+
+var result = _.chain(occurences)
+    .groupBy(occurrenceDay)
+    .map(groupToDay)
+    .sortBy('day')
+    .value();
+		
+
+		if (i % 3 === 0){
+			forString += `<div class ="row">`;
+		}		
+		forString += `<div class="col-sm-6 col-md-4 ">`;
+	    forString += 	`<div class="thumbnail">`;  
+	    forString +=  		`<div class="caption">`;
+	    forString += 			`<p>${date}</p>`;
+	    forString += 		 `</div>`;
+	    forString +=  	`</div>`;
+	    forString +=  `</div>`;
+	  	
+	//     forString +=    `<p>${t}</p>`;
+	//     forString +=  `</div>`;
+	//     forString +=  `</div>`;
+	// // }
+	  	// forString +=  `</div>`;
+	  	if (i % 3 === 2 || i === forecastArray.length -1) {
+		forString += `</div>`;
+
+}
+			
+		
+	}
+		printToDom2(forString);
+		console.log(forString);
+
+};
+
+
+
+
+
+
+
+
+
+module.exports = {domString, clearDom, fiveForecast};

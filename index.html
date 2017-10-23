@@ -14,15 +14,32 @@
     <input id='searchBar' type="number" class="form-control" placeholder="Search..." aria-describedby="search-query">
   </div>
 
-<div>
-	<button type="button" id="submitButton" class="btn btn-info">Submit</button>
+<div class="container">
+<div class="row">
+	<div >
+	<button type="button" id="submitButton" class="btn btn-info col-md-4 col-md-offset-4" ">Submit</button>
+	</div>
+</div>
 </div>
 
-<div id="localWeather">
+<div class="container">
+	<div id="localWeather">
 	
+	</div>
 </div>
 
-<script type="text/javascript" src="lib/node_modules/jquery/dist/jquery.js"></script>
+
+<div>
+	<a href="#" class="btn btn-primary col-md-2 col-md-offset-5" id="three" role="button">3 day forecast</a>
+	<a href="#" class="btn btn-primary col-md-2 col-md-offset-5" id="five" role="button">5 day forecast</a>
+</div><br>
+
+
+<div class="container" id="futureForecast">
+</div>
+
+<!-- <script type="text/javascript" src="lib/node_modules/moment/moment.js"></script>
+ --><script type="text/javascript" src="lib/node_modules/jquery/dist/jquery.js"></script>
 <script type="text/javascript" src="lib/node_modules/bootstrap/dist/js/bootstrap.js"></script>
 <script type="text/javascript" src="./dist/app.js"></script>
 </body>
