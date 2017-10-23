@@ -50,28 +50,41 @@ const printToDom2 = (strang) => {
 const fiveForecast = (forecastArray) => {
 	console.log("from dom", forecastArray.length);
 	let forString = '';
-	// let t = 0;
+	
 	for(let i =0; i < forecastArray.length; i++) {
 		console.log("from for loop", forecastArray);
-	if (i && (i % 3 === 0)){
-
-		// if (i % 3 === 0){
-		// 	forString += `<div class ="row">`;
-		// }		
+		var d = new Date();
+		var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+		document.getElementById("futureForecast").innerHTML = days[d.getDay()];
 		
-	  	forString += `<div class="col-sm-6 col-md-4 ">`;
+		
+
+var result = _.chain(occurences)
+    .groupBy(occurrenceDay)
+    .map(groupToDay)
+    .sortBy('day')
+    .value();
+		
+
+		if (i % 3 === 0){
+			forString += `<div class ="row">`;
+		}		
+		forString += `<div class="col-sm-6 col-md-4 ">`;
 	    forString += 	`<div class="thumbnail">`;  
-	    forString +=  `<div class="caption">`;
-	    forString += 	`<p>${forecastArray[i].dt_txt.split(" ")}`;
-	    forString +=    `<p>${forecastArray[i].main.temp}</p>`;
-	    forString +=    `<p>${forecastArray[i].weather[0].description}</p>`;
+	    forString +=  		`<div class="caption">`;
+	    forString += 			`<p>${date}</p>`;
+	    forString += 		 `</div>`;
+	    forString +=  	`</div>`;
 	    forString +=  `</div>`;
-	    forString +=  `</div>`;
-	    forString += 	`</div>`;
+	  	
+	//     forString +=    `<p>${t}</p>`;
+	//     forString +=  `</div>`;
+	//     forString +=  `</div>`;
+	// // }
 	  	// forString +=  `</div>`;
 	  	if (i % 3 === 2 || i === forecastArray.length -1) {
 		forString += `</div>`;
-}
+
 }
 			
 		
