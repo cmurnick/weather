@@ -30,9 +30,9 @@ const searchOWM = (zip) => {
 
 const getForecast = (zip) => {
 	return new Promise((resolve, reject) => {
-		$.ajax(`http://api.openweathermap.org/data/2.5/forecast?zip=${zip},us&APPID=${owmKey}&units=imperial`).done((data) => {
+		$.ajax(`http://api.openweathermap.org/data/2.5/forecast/?zip=${zip},us&APPID=${owmKey}&units=imperial`).done((data) => {
 			resolve(data.list);
-			// console.log(data.list);
+			console.log(data.list);
 		}).fail((error) => {
 			reject(error);
 		});

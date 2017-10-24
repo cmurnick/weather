@@ -47,54 +47,45 @@ const printToDom2 = (strang) => {
 	$("#futureForecast").append(strang);
 };
 
-const fiveForecast = (forecastArray) => {
-	console.log("from dom", forecastArray.length);
-	let forString = '';
+// const fiveForecast = (forecastArray) => {
+// 	console.log("from dom", forecastArray.length);
+// 	let forString = '';
 	
-	for(let i =0; i < forecastArray.length; i++) {
-		console.log("from for loop", forecastArray);
-		var d = new Date();
-		var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-		document.getElementById("futureForecast").innerHTML = days[d.getDay()];
+// 	for(let i =0; i < forecastArray.length; i++) {
+// 		console.log("from for loop", forecastArray);
+// 		var d = new Date();
+// 		var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+// 		// document.getElementById("futureForecast").innerHTML = days[d.getDay()];
 		
 		
 
-var result = _.chain(occurences)
-    .groupBy(occurrenceDay)
-    .map(groupToDay)
-    .sortBy('day')
-    .value();
-		
-
-		if (i % 3 === 0){
-			forString += `<div class ="row">`;
-		}		
-		forString += `<div class="col-sm-6 col-md-4 ">`;
-	    forString += 	`<div class="thumbnail">`;  
-	    forString +=  		`<div class="caption">`;
-	    forString += 			`<p>${date}</p>`;
-	    forString += 		 `</div>`;
-	    forString +=  	`</div>`;
-	    forString +=  `</div>`;
+		// if (i % 3 === 0){
+		// 	forString += `<div class ="row">`;
+		// }		
+		// forString += `<div class="col-sm-6 col-md-4 ">`;
+	 //    forString += 	`<div class="thumbnail">`;  
+	 //    forString +=  		`<div class="caption">`;
+	 //    forString += 			`<p>${date}</p>`;
+	 //    forString += 		 `</div>`;
+	 //    forString +=  	`</div>`;
+	 //    forString +=  `</div>`;
 	  	
 	//     forString +=    `<p>${t}</p>`;
 	//     forString +=  `</div>`;
 	//     forString +=  `</div>`;
 	// // }
 	  	// forString +=  `</div>`;
-	  	if (i % 3 === 2 || i === forecastArray.length -1) {
-		forString += `</div>`;
+	 //  	if (i % 3 === 2 || i === forecastArray.length -1) {
+		// forString += `</div>`;
 
-}
+// }
 			
 		
-	}
-		printToDom2(forString);
-		console.log(forString);
+// 	}
+// 		printToDom2(forString);
+// 		console.log(forString);
 
-};
-
-
+// };
 
 
 
@@ -102,4 +93,6 @@ var result = _.chain(occurences)
 
 
 
-module.exports = {domString, clearDom, fiveForecast};
+
+
+module.exports = {domString, clearDom};

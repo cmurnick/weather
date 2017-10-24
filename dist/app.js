@@ -72,46 +72,45 @@ const printToDom2 = (strang) => {
 	$("#futureForecast").append(strang);
 };
 
-const fiveForecast = (forecastArray) => {
-	console.log("from dom", forecastArray.length);
-	let forString = '';
+// const fiveForecast = (forecastArray) => {
+// 	console.log("from dom", forecastArray.length);
+// 	let forString = '';
 	
-	for(let i =0; i < forecastArray.length; i++) {
-		console.log("from for loop", forecastArray);
-		var d = new Date();
-		var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-		document.getElementById("futureForecast").innerHTML = days[d.getDay()];
-		let date = forecastArray[i].dt_txt.slice(0, 10);
+// 	for(let i =0; i < forecastArray.length; i++) {
+// 		console.log("from for loop", forecastArray);
+// 		var d = new Date();
+// 		var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+// 		// document.getElementById("futureForecast").innerHTML = days[d.getDay()];
+		
+		
 
-		if (i % 3 === 0){
-			forString += `<div class ="row">`;
-		}		
-		forString += `<div class="col-sm-6 col-md-4 ">`;
-	    forString += 	`<div class="thumbnail">`;  
-	    forString +=  		`<div class="caption">`;
-	    forString += 			`<p>${date}</p>`;
-	    forString += 		 `</div>`;
-	    forString +=  	`</div>`;
-	    forString +=  `</div>`;
+		// if (i % 3 === 0){
+		// 	forString += `<div class ="row">`;
+		// }		
+		// forString += `<div class="col-sm-6 col-md-4 ">`;
+	 //    forString += 	`<div class="thumbnail">`;  
+	 //    forString +=  		`<div class="caption">`;
+	 //    forString += 			`<p>${date}</p>`;
+	 //    forString += 		 `</div>`;
+	 //    forString +=  	`</div>`;
+	 //    forString +=  `</div>`;
 	  	
 	//     forString +=    `<p>${t}</p>`;
 	//     forString +=  `</div>`;
 	//     forString +=  `</div>`;
 	// // }
 	  	// forString +=  `</div>`;
-	  	if (i % 3 === 2 || i === forecastArray.length -1) {
-		forString += `</div>`;
+	 //  	if (i % 3 === 2 || i === forecastArray.length -1) {
+		// forString += `</div>`;
 
-}
+// }
 			
 		
-	}
-		printToDom2(forString);
-		console.log(forString);
+// 	}
+// 		printToDom2(forString);
+// 		console.log(forString);
 
-};
-
-
+// };
 
 
 
@@ -119,7 +118,9 @@ const fiveForecast = (forecastArray) => {
 
 
 
-module.exports = {domString, clearDom, fiveForecast};
+
+
+module.exports = {domString, clearDom};
 },{}],3:[function(require,module,exports){
 "use strict";
 
@@ -156,7 +157,6 @@ const fiveDayForecast = () => {
 		let zip = searchText;
 		tmdb.getForecast(zip).then((results) => {
 		console.log(results);
-		
 		dom.fiveForecast(results);
 		
 	}).catch((error) => {
@@ -224,9 +224,9 @@ const searchOWM = (zip) => {
 
 const getForecast = (zip) => {
 	return new Promise((resolve, reject) => {
-		$.ajax(`http://api.openweathermap.org/data/2.5/forecast?zip=${zip},us&APPID=${owmKey}&units=imperial`).done((data) => {
+		$.ajax(`http://api.openweathermap.org/data/2.5/forecast/?zip=${zip},us&APPID=${owmKey}&units=imperial`).done((data) => {
 			resolve(data.list);
-			// console.log(data.list);
+			console.log(data.list);
 		}).fail((error) => {
 			reject(error);
 		});
