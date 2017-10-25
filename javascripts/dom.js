@@ -47,25 +47,21 @@ const printToDom2 = (strang) => {
 	$("#futureForecast").append(strang);
 };
 
-// const fiveForecast = (forecastArray) => {
+const fiveForecast = (forecastArray) => {
+	console.log(forecastArray[0].dt_txt);
 // 	console.log("from dom", forecastArray.length);
 // 	let forString = '';
 	
-// 	for(let i =0; i < forecastArray.length; i++) {
-// 		console.log("from for loop", forecastArray);
-// 		var d = new Date();
-// 		var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-// 		// document.getElementById("futureForecast").innerHTML = days[d.getDay()];
-		
-		
+	for(let i = 0; i < forecastArray.length; i += 9) {
+		console.log(forecastArray[i].dt_txt);
+// 		forecastArray[i].dt_txt
+		}
 
-		// if (i % 3 === 0){
-		// 	forString += `<div class ="row">`;
-		// }		
+				
 		// forString += `<div class="col-sm-6 col-md-4 ">`;
 	 //    forString += 	`<div class="thumbnail">`;  
 	 //    forString +=  		`<div class="caption">`;
-	 //    forString += 			`<p>${date}</p>`;
+	 //    forString += 			`<p>${forecastArray[i].dt_txt}</p>`;
 	 //    forString += 		 `</div>`;
 	 //    forString +=  	`</div>`;
 	 //    forString +=  `</div>`;
@@ -85,7 +81,7 @@ const printToDom2 = (strang) => {
 // 		printToDom2(forString);
 // 		console.log(forString);
 
-// };
+};
 
 
 
@@ -95,4 +91,4 @@ const printToDom2 = (strang) => {
 
 
 
-module.exports = {domString, clearDom};
+module.exports = {domString, clearDom, fiveForecast};

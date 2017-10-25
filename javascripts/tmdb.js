@@ -6,7 +6,6 @@ let owmKey;
 const dom = require('./dom');
 
 let now = [];
-let forecast = [];
 
 const searchOWM = (zip) => {
 	return new Promise((resolve, reject) => {
@@ -32,7 +31,16 @@ const getForecast = (zip) => {
 	return new Promise((resolve, reject) => {
 		$.ajax(`http://api.openweathermap.org/data/2.5/forecast/?zip=${zip},us&APPID=${owmKey}&units=imperial`).done((data) => {
 			resolve(data.list);
-			console.log(data.list);
+			
+
+			// var dict = product;
+			// for(var key in dict) {
+			// 	// console.log(key);
+			// 	products.push(dict[key]);
+
+			// }
+
+			// console.log(forecast);
 		}).fail((error) => {
 			reject(error);
 		});

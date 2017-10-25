@@ -72,25 +72,21 @@ const printToDom2 = (strang) => {
 	$("#futureForecast").append(strang);
 };
 
-// const fiveForecast = (forecastArray) => {
+const fiveForecast = (forecastArray) => {
+	console.log(forecastArray[0].dt_txt);
 // 	console.log("from dom", forecastArray.length);
 // 	let forString = '';
 	
-// 	for(let i =0; i < forecastArray.length; i++) {
-// 		console.log("from for loop", forecastArray);
-// 		var d = new Date();
-// 		var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-// 		// document.getElementById("futureForecast").innerHTML = days[d.getDay()];
-		
-		
+	for(let i = 0; i < forecastArray.length; i += 9) {
+		console.log(forecastArray[i].dt_txt);
+// 		forecastArray[i].dt_txt
+		}
 
-		// if (i % 3 === 0){
-		// 	forString += `<div class ="row">`;
-		// }		
+				
 		// forString += `<div class="col-sm-6 col-md-4 ">`;
 	 //    forString += 	`<div class="thumbnail">`;  
 	 //    forString +=  		`<div class="caption">`;
-	 //    forString += 			`<p>${date}</p>`;
+	 //    forString += 			`<p>${forecastArray[i].dt_txt}</p>`;
 	 //    forString += 		 `</div>`;
 	 //    forString +=  	`</div>`;
 	 //    forString +=  `</div>`;
@@ -110,7 +106,7 @@ const printToDom2 = (strang) => {
 // 		printToDom2(forString);
 // 		console.log(forString);
 
-// };
+};
 
 
 
@@ -120,12 +116,14 @@ const printToDom2 = (strang) => {
 
 
 
-module.exports = {domString, clearDom};
+module.exports = {domString, clearDom, fiveForecast};
 },{}],3:[function(require,module,exports){
 "use strict";
 
 const tmdb = require('./tmdb');
 const dom = require('./dom');
+
+let forecast = [];
 
 const pressEnter = () => {
 	$(document).keypress((e) => {
@@ -155,14 +153,22 @@ const fiveDayForecast = () => {
 		console.log("works");
 		let searchText = $('#searchBar').val();
 		let zip = searchText;
-		tmdb.getForecast(zip).then((results) => {
-		console.log(results);
-		dom.fiveForecast(results);
 		
+		tmdb.getForecast(zip).then((results) => {
+		// console.log(results);
+		// let newForecast = {
+		// 	"date": '',
+		// 	"temp":''
+		// };
+
+		
+
+			console.log(results);
+		dom.fiveForecast(results);
 	}).catch((error) => {
 		console.log("error in getConfig from fiveDayForecast", error);
 	});
-		console.log("zip");
+		
 		
 
 	});
@@ -200,7 +206,6 @@ let owmKey;
 const dom = require('./dom');
 
 let now = [];
-let forecast = [];
 
 const searchOWM = (zip) => {
 	return new Promise((resolve, reject) => {
@@ -226,7 +231,16 @@ const getForecast = (zip) => {
 	return new Promise((resolve, reject) => {
 		$.ajax(`http://api.openweathermap.org/data/2.5/forecast/?zip=${zip},us&APPID=${owmKey}&units=imperial`).done((data) => {
 			resolve(data.list);
-			console.log(data.list);
+			
+
+			// var dict = product;
+			// for(var key in dict) {
+			// 	// console.log(key);
+			// 	products.push(dict[key]);
+
+			// }
+
+			// console.log(forecast);
 		}).fail((error) => {
 			reject(error);
 		});
