@@ -50,36 +50,25 @@ const printToDom2 = (strang) => {
 const fiveForecast = (forecastArray) => {
 	console.log(forecastArray[0].dt_txt);
 // 	console.log("from dom", forecastArray.length);
-// 	let forString = '';
+	let forString = '';
 	
-	for(let i = 0; i < forecastArray.length; i += 9) {
-		console.log(forecastArray[i].dt_txt);
+	for(let i = 0; i < forecastArray.length; i += 8) {
+		console.log(forecastArray[i].dt_txt.slice(0, 10));
 // 		forecastArray[i].dt_txt
-		}
-
-				
-		// forString += `<div class="col-sm-6 col-md-4 ">`;
-	 //    forString += 	`<div class="thumbnail">`;  
-	 //    forString +=  		`<div class="caption">`;
-	 //    forString += 			`<p>${forecastArray[i].dt_txt}</p>`;
-	 //    forString += 		 `</div>`;
-	 //    forString +=  	`</div>`;
-	 //    forString +=  `</div>`;
-	  	
-	//     forString +=    `<p>${t}</p>`;
-	//     forString +=  `</div>`;
-	//     forString +=  `</div>`;
-	// // }
-	  	// forString +=  `</div>`;
-	 //  	if (i % 3 === 2 || i === forecastArray.length -1) {
-		// forString += `</div>`;
-
-// }
-			
-		
-// 	}
-// 		printToDom2(forString);
-// 		console.log(forString);
+						
+		forString += `<div class="col-sm-6 col-md-4 ">`;
+	    forString += 	`<div class="thumbnail">`;  
+	    forString +=  		`<div class="caption">`;
+	    forString += 			`<p>${forecastArray[i].dt_txt.slice(0, 10)}</p>`;
+	    forString +=			`<p>${forecastArray[i].main.temp}</p>`;
+	    forString += 		 `</div>`;
+	    forString +=  	`</div>`;
+	    forString +=  `</div>`;
+	    // forString +=  `</div>`;
+	 }
+	
+		printToDom2(forString);
+		console.log(forString);
 
 };
 
