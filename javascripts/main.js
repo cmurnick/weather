@@ -16,3 +16,4 @@ apiKeys.retrieveKeys();
 events.pressEnter();
 events.submitButton();
 events.fiveDayForecast();
+events.threeDayForecast();

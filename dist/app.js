@@ -72,12 +72,16 @@ const printToDom2 = (strang) => {
 	$("#futureForecast").append(strang);
 };
 
-const fiveForecast = (forecastArray) => {
-	console.log(forecastArray[0].dt_txt);
+const fiveForecast = (forecastArray, days) => { console.log(forecastArray, days);
+	// console.log(forecastArray[0].dt_txt);
 // 	console.log("from dom", forecastArray.length);
 	let forString = '';
-	
-	for(let i = 0; i < forecastArray.length; i += 8) {
+	var stop = 40;
+
+	if (days === 3 ) {
+		stop = 32;
+	}
+	for(let i = 8; i < stop; i=i+8) {
 		console.log(forecastArray[i].dt_txt.slice(0, 10));
 // 		forecastArray[i].dt_txt
 						
@@ -142,30 +146,29 @@ const fiveDayForecast = () => {
 		console.log("works");
 		let searchText = $('#searchBar').val();
 		let zip = searchText;
-		
-		tmdb.getForecast(zip).then((results) => {
-		// console.log(results);
-		// let newForecast = {
-		// 	"date": '',
-		// 	"temp":''
-		// };
-
-		
-
-			console.log(results);
-		dom.fiveForecast(results);
+		let days = 5;
+		tmdb.getForecast(zip, days).then((results) => {
+		dom.fiveForecast(results, days);
 	}).catch((error) => {
 		console.log("error in getConfig from fiveDayForecast", error);
 	});
-		
-		
-
 	});
 };
 
+const threeDayForecast = () => {
+		$("#three").click(() => {
+		let searchText = $('#searchBar').val();
+		let zip = searchText;
+		let days = 3;
+		tmdb.getForecast(zip, days).then((results) => {
+		dom.fiveForecast(results, days);
+	}).catch((error) => {
+		console.log("error in getConfig from fiveDayForecast", error);
+	});
+	});
+};
 
-
-module.exports = {pressEnter, submitButton, fiveDayForecast};
+module.exports = {pressEnter, submitButton, fiveDayForecast, threeDayForecast};
 
 },{"./dom":2,"./tmdb":5}],4:[function(require,module,exports){
 
@@ -186,6 +189,7 @@ apiKeys.retrieveKeys();
 events.pressEnter();
 events.submitButton();
 events.fiveDayForecast();
+events.threeDayForecast();
 },{"./apiKeys":1,"./events":3,"./tmdb":5}],5:[function(require,module,exports){
 "use strict";
 
