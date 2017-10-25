@@ -47,12 +47,16 @@ const printToDom2 = (strang) => {
 	$("#futureForecast").append(strang);
 };
 
-const fiveForecast = (forecastArray) => {
-	console.log(forecastArray[0].dt_txt);
+const fiveForecast = (forecastArray, days) => { console.log(forecastArray, days);
+	// console.log(forecastArray[0].dt_txt);
 // 	console.log("from dom", forecastArray.length);
 	let forString = '';
-	
-	for(let i = 0; i < forecastArray.length; i += 8) {
+	var stop = 40;
+
+	if (days === 3 ) {
+		stop = 32;
+	}
+	for(let i = 8; i < stop; i=i+8) {
 		console.log(forecastArray[i].dt_txt.slice(0, 10));
 // 		forecastArray[i].dt_txt
 						
