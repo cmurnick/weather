@@ -48,7 +48,7 @@ const printToDom2 = (strang) => {
 };
 
 const fiveForecast = (forecastArray, days) => { console.log(forecastArray, days);
-	// console.log(forecastArray[0].dt_txt);
+	console.log(forecastArray);
 // 	console.log("from dom", forecastArray.length);
 	let forString = '';
 	var stop = 40;
@@ -64,7 +64,10 @@ const fiveForecast = (forecastArray, days) => { console.log(forecastArray, days)
 	    forString += 	`<div class="thumbnail">`;  
 	    forString +=  		`<div class="caption">`;
 	    forString += 			`<p>${forecastArray[i].dt_txt.slice(0, 10)}</p>`;
-	    forString +=			`<p>${forecastArray[i].main.temp}</p>`;
+	    forString += 			`<p>Temp: ${forecastArray[i].main.temp} degrees</p>`;
+	    forString += 			`<p>Conditions: ${forecastArray[i].weather[0].main}</p>`;
+	    forString += 			`<p>Pressure: ${forecastArray[i].main.pressure}</p>`;
+	    forString +=			`<p>Wind:${forecastArray[i].wind.speed} mph</p>`;
 	    forString += 		 `</div>`;
 	    forString +=  	`</div>`;
 	    forString +=  `</div>`;
