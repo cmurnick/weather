@@ -2,6 +2,8 @@
 
 const tmdb = require('./tmdb');
 const dom = require('./dom');
+const firebaseApi = require('./firebaseApi');
+
 
 let forecast = [];
 
@@ -55,4 +57,21 @@ const threeDayForecast = () => {
 	});
 };
 
-module.exports = {pressEnter, submitButton, fiveDayForecast, threeDayForecast};
+const googleAuth = () => {
+	$('#googleButton').click((e) =>{
+		firebaseApi.authenticateGoogle().then().catch((err) =>{
+			console.log("error in authenticateGoogle", err);
+		});
+	});
+};
+
+const init = () =>{
+	pressEnter();
+	submitButton();
+	fiveDayForecast();
+	threeDayForecast();
+	googleAuth();
+	
+};
+
+module.exports = {init};
