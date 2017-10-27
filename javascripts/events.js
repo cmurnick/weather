@@ -65,13 +65,37 @@ const googleAuth = () => {
 	});
 };
 
+const createUser = () => {
+	$('#createAccount').click((e) => {
+		firebaseApi.authenticateEmail().then().catch((err) =>{
+			console.log("error in authenticateEmail", err);
+  // var errorCode = error.code;
+  // var errorMessage = error.message;
+  // ...
+});
+	});
+};
+
+const signInUser = () => {
+	$('#signIn').click((e) => {
+		firebaseApi.authenticateSignIn().then().catch((err) =>{
+			console.log("error in signin", err);
+  // var errorCode = error.code;
+  // var errorMessage = error.message;
+  // ...
+});
+	});
+};
+
 const init = () =>{
 	pressEnter();
 	submitButton();
 	fiveDayForecast();
 	threeDayForecast();
 	googleAuth();
-	
+	createUser();
+	signInUser()
+;	
 };
 
 module.exports = {init};

@@ -1,2 +1,8 @@
-btn {
-  display: block; }
+#emlPswd {
+  display: inline-block; }
+
+#emlPswd {
+  margin-bottom: 50px; }
+
+.login {
+  margin-top: 25px; }
