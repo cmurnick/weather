@@ -1,0 +1,28 @@
+{
+	"weather":{
+		"weather1": {
+			"date": "Star Wars: The Force Awakens0",
+			"temp": "Thirty years after defeating the Galactic Empire, Han Solo and his allies face a new threat from the evil Kylo Ren and his army of Stormtroopers.",
+			"wind speed": "5 mph",
+			"pressure": 5,
+			"isWatched": false,
+			"Uid": "Nu7GAProXWbQ4TXwSzyKyZlg6WQ2"
+		},
+		"weather2": {
+			"date": "Star Wars: The Force Awakens0",
+			"temp": "Thirty years after defeating the Galactic Empire, Han Solo and his allies face a new threat from the evil Kylo Ren and his army of Stormtroopers.",
+			"wind speed": "5 mph",
+			"pressure": 5,
+			"isWatched": false,
+			"Uid": "Nu7GAProXWbQ4TXwSzyKyZlg6WQ2"
+		},
+		"weather3": {
+			"date": "Star Wars: The Force Awakens0",
+			"temp": "Thirty years after defeating the Galactic Empire, Han Solo and his allies face a new threat from the evil Kylo Ren and his army of Stormtroopers.",
+			"wind speed": "5 mph",
+			"pressure": 5,
+			"isWatched": false,
+			"Uid": "12345"
+		}
+	}
+}

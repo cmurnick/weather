@@ -2,6 +2,8 @@
 "use strict";
 
 const tmdb = require('./tmdb');
+const firebaseApi = require('./firebaseApi');
+
 
 const apiKeys = () => {
 	return new Promise((resolve, reject) => {
@@ -13,16 +15,28 @@ const apiKeys = () => {
 	});
 };
 
+// const retrieveKeys = () => {
+// 	apiKeys().then((results) => {
+// 		tmdb.setKey(results.tmdb.apiKey);
+// 	}).catch((error) => {
+// 		console.log('error in retrieve keys', error);
+// 	});
+// };
+
 const retrieveKeys = () => {
-	apiKeys().then((results) => {
-		tmdb.setKey(results.tmdb.apiKey);
-	}).catch((error) => {
-		console.log('error in retrieve keys', error);
-	});
+  apiKeys().then((results) => {
+    tmdb.setKey(results.tmdb.apiKey);
+    firebaseApi.setKey(results.firebaseKeys);
+    firebase.initializeApp(results.firebaseKeys);
+  }).catch((error) => {
+    console.log("error in retrieve keys", error);
+  });
 };
 
+
+
 module.exports = {retrieveKeys};
-},{"./tmdb":5}],2:[function(require,module,exports){
+},{"./firebaseApi":4,"./tmdb":6}],2:[function(require,module,exports){
 "use strict";
 
 // const tmdb = require('./tmdb');
@@ -73,7 +87,7 @@ const printToDom2 = (strang) => {
 };
 
 const fiveForecast = (forecastArray, days) => { console.log(forecastArray, days);
-	// console.log(forecastArray[0].dt_txt);
+	console.log(forecastArray);
 // 	console.log("from dom", forecastArray.length);
 	let forString = '';
 	var stop = 40;
@@ -89,7 +103,10 @@ const fiveForecast = (forecastArray, days) => { console.log(forecastArray, days)
 	    forString += 	`<div class="thumbnail">`;  
 	    forString +=  		`<div class="caption">`;
 	    forString += 			`<p>${forecastArray[i].dt_txt.slice(0, 10)}</p>`;
-	    forString +=			`<p>${forecastArray[i].main.temp}</p>`;
+	    forString += 			`<p>Temp: ${forecastArray[i].main.temp} degrees</p>`;
+	    forString += 			`<p>Conditions: ${forecastArray[i].weather[0].main}</p>`;
+	    forString += 			`<p>Pressure: ${forecastArray[i].main.pressure}</p>`;
+	    forString +=			`<p>Wind:${forecastArray[i].wind.speed} mph</p>`;
 	    forString += 		 `</div>`;
 	    forString +=  	`</div>`;
 	    forString +=  `</div>`;
@@ -115,6 +132,8 @@ module.exports = {domString, clearDom, fiveForecast};
 
 const tmdb = require('./tmdb');
 const dom = require('./dom');
+const firebaseApi = require('./firebaseApi');
+
 
 let forecast = [];
 
@@ -168,9 +187,127 @@ const threeDayForecast = () => {
 	});
 };
 
-module.exports = {pressEnter, submitButton, fiveDayForecast, threeDayForecast};
+const googleAuth = () => {
+	$('#googleButton').click((e) =>{
+		firebaseApi.authenticateGoogle().then().catch((err) =>{
+			console.log("error in authenticateGoogle", err);
+		});
+	});
+};
 
-},{"./dom":2,"./tmdb":5}],4:[function(require,module,exports){
+const createUser = () => {
+	$('#createAccount').click((e) => {
+		firebaseApi.authenticateEmail().then().catch((err) =>{
+			console.log("error in authenticateEmail", err);
+  // var errorCode = error.code;
+  // var errorMessage = error.message;
+  // ...
+});
+	});
+};
+
+const signInUser = () => {
+	$('#signIn').click((e) => {
+		firebaseApi.authenticateSignIn().then().catch((err) =>{
+			console.log("error in signin", err);
+  // var errorCode = error.code;
+  // var errorMessage = error.message;
+  // ...
+});
+	});
+};
+
+const init = () =>{
+	pressEnter();
+	submitButton();
+	fiveDayForecast();
+	threeDayForecast();
+	googleAuth();
+	createUser();
+	signInUser()
+;	
+};
+
+module.exports = {init};
+
+},{"./dom":2,"./firebaseApi":4,"./tmdb":6}],4:[function(require,module,exports){
+"use strict";
+
+let firebaseKey = "";
+let userUid = "";
+
+const setKey = (key) =>{
+	firebaseKey = key;
+
+};
+
+// console.log("firebase apps?", firebase.apps);
+
+
+//Firebase: GOOGLE - Use input credentials to authenticate user.
+let authenticateGoogle = () => {
+	return new Promise((resolve, reject) => {
+	  var provider = new firebase.auth.GoogleAuthProvider();
+	  firebase.auth().signInWithPopup(provider)
+
+	    .then((authData) => {
+	    	userUid = authData.user.uid;
+	        resolve(authData.user);
+	        console.log("does this shit work", authData);
+	    }).catch((error) => {
+	        reject(error);
+	    });
+	});
+};
+
+let authenticateEmail = () => {
+	let email = $("#emailInput").val();
+	let password = $("#passwordInput").val();
+	let createUserWithEmailAndPassword = (email, password);
+
+	return new Promise((resolve, reject) => {
+	  var provider = new firebase.auth().createUserWithEmailAndPassword(email, password);
+	  firebase.auth().signInWithEmailAndPassword(email,password)
+
+	    .then((authData) => {
+	    	userUid = authData.user.uid;
+	        resolve(authData.user);
+	        console.log("does this email shit work", authData);
+	    }).catch((error) => {
+	        reject(error);
+	    });
+	});
+};
+
+let authenticateSignIn = () => {
+	let email = $("#emailInput").val();
+	let password = $("#passwordInput").val();
+	let signInWithEmailAndPassword = (email, password);
+
+	return new Promise((resolve, reject) => {
+	  var provider = new firebase.auth().signInWithEmailAndPassword(email, password);
+	  firebase.auth().signInWithEmailAndPassword(email,password)
+
+	    .then((authData) => {
+	    	userUid = authData.user.uid;
+	        resolve(authData.user);
+	        console.log("does this email shit work", authData);
+	    }).catch((error) => {
+	        reject(error);
+	    });
+	});
+};
+
+// firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+//   // Handle Errors here.
+//   var errorCode = error.code;
+//   var errorMessage = error.message;
+//   // ...
+// });
+
+module.exports = {setKey, authenticateGoogle, authenticateEmail, authenticateSignIn};
+
+},{}],5:[function(require,module,exports){
 
 "use strict";
 
@@ -178,19 +315,14 @@ module.exports = {pressEnter, submitButton, fiveDayForecast, threeDayForecast};
 let tmdb = require('./tmdb');
 let events = require('./events');
 let apiKeys = require('./apiKeys');
+let firebaseApi = require('./firebaseApi');
 
 apiKeys.retrieveKeys();
 
-// $(document).click(() => {
-// 	tmdb.searchOWM(60439);
-// });
 
+events.init();
 
-events.pressEnter();
-events.submitButton();
-events.fiveDayForecast();
-events.threeDayForecast();
-},{"./apiKeys":1,"./events":3,"./tmdb":5}],5:[function(require,module,exports){
+},{"./apiKeys":1,"./events":3,"./firebaseApi":4,"./tmdb":6}],6:[function(require,module,exports){
 "use strict";
 
 let owmKey;
@@ -276,4 +408,4 @@ module.exports = {setKey, searchOWM, getForecast};
 
 
 
-},{"./dom":2}]},{},[4]);
+},{"./dom":2}]},{},[5]);
