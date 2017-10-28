@@ -30,11 +30,11 @@ let authenticateGoogle = () => {
 let authenticateEmail = () => {
 	let email = $("#emailInput").val();
 	let password = $("#passwordInput").val();
-	let createUserWithEmailAndPassword = (email, password);
+	// let createUserWithEmailAndPassword = (email, password);
 
 	return new Promise((resolve, reject) => {
-	  var provider = new firebase.auth().createUserWithEmailAndPassword(email, password);
-	  firebase.auth().signInWithEmailAndPassword(email,password)
+	  var provider = new firebase.auth().createUserWithEmailAndPassword(email, password)
+	  // firebase.auth().signInWithEmailAndPassword(provider)
 
 	    .then((authData) => {
 	    	userUid = authData.user.uid;
@@ -65,11 +65,22 @@ let authenticateSignIn = () => {
 	});
 };
 
-// firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-//   // Handle Errors here.
-//   var errorCode = error.code;
-//   var errorMessage = error.message;
-//   // ...
-// });
+const saveWeather = (weather) => {
+	weather.uid = userUid;
+	return new Promise((resolve, reject) =>{
+		$.ajax({
+			method: "POST",
+			url: `${firebaseKey.databaseURL}/weather.json`,
+			data: JSON.stringify(weather)
+		}).then((result) => {
+			resolve(result);
+			console.log("freaking work");
+		}).catch((error) => {
+			reject(error);
+		});
+	});
+};
 
-module.exports = {setKey, authenticateGoogle, authenticateEmail, authenticateSignIn};
+
+
+module.exports = {setKey, authenticateGoogle, authenticateEmail, authenticateSignIn, saveWeather};

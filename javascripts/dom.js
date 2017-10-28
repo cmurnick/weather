@@ -17,8 +17,6 @@ const domString = (weatherArray) => {
 		
 	  	domString += `<div class="col-md-4 col-md-offset-4">`;
 	    domString += 	`<div class = "thumbnail">`;
-	//     domString +=	  `<img src="${imgConfig.base_url}/w342/${movieArray[i].poster_path}"
- // alt="">`;
 	    domString +=  `<div class="caption">`;
 	    domString +=    `<h3>${weatherArray[i].name}</h3>`;
 	    domString +=    `<p>${weatherArray[i].temp}</p>`;
@@ -56,22 +54,27 @@ const fiveForecast = (forecastArray, days) => { console.log(forecastArray, days)
 	if (days === 3 ) {
 		stop = 32;
 	}
-	for(let i = 8; i < stop; i=i+8) {
+	for(let i = 0; i < stop; i=i+9) {
 		console.log(forecastArray[i].dt_txt.slice(0, 10));
 // 		forecastArray[i].dt_txt
-						
-		forString += `<div class="col-sm-6 col-md-4 ">`;
+		// if(i % 3 === 0) {
+		// 	forString += `<div class="row">`;
+		// }
+		forString += `<div class="col-sm-6 col-md-4 savedWeatherForecasts">`;
 	    forString += 	`<div class="thumbnail">`;  
 	    forString +=  		`<div class="caption">`;
-	    forString += 			`<p>${forecastArray[i].dt_txt.slice(0, 10)}</p>`;
-	    forString += 			`<p>Temp: ${forecastArray[i].main.temp} degrees</p>`;
-	    forString += 			`<p>Conditions: ${forecastArray[i].weather[0].main}</p>`;
-	    forString += 			`<p>Pressure: ${forecastArray[i].main.pressure}</p>`;
-	    forString +=			`<p>Wind:${forecastArray[i].wind.speed} mph</p>`;
-	    forString += 		 `</div>`;
+	    forString += 			`<p class="date">${forecastArray[i].dt_txt.slice(0, 10)}</p>`;
+	    forString += 			`<p class="temp">Temp: ${forecastArray[i].main.temp} degrees</p>`;
+	    forString += 			`<p class="conditions">Conditions: ${forecastArray[i].weather[0].main}</p>`;
+	    forString += 			`<p class="airPressure">Pressure: ${forecastArray[i].main.pressure}</p>`;
+	    forString +=			`<p class="wind">Wind:${forecastArray[i].wind.speed} mph</p>`;
+	    forString += 		 	`<p >`;
+	    forString +=				`<button type="button" class="weatherHolder btn btn-primary btn-xs">Save Forecast</button>`;
+	    forString +=		 	`</p>`;
 	    forString +=  	`</div>`;
 	    forString +=  `</div>`;
-	    // forString +=  `</div>`;
+	    forString +=  `</div>`;
+	    // forString += `</div>`;
 	 }
 	
 		printToDom2(forString);
