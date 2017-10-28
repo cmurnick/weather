@@ -56,8 +56,6 @@ const domString = (weatherArray) => {
 		
 	  	domString += `<div class="col-md-4 col-md-offset-4">`;
 	    domString += 	`<div class = "thumbnail">`;
-	//     domString +=	  `<img src="${imgConfig.base_url}/w342/${movieArray[i].poster_path}"
- // alt="">`;
 	    domString +=  `<div class="caption">`;
 	    domString +=    `<h3>${weatherArray[i].name}</h3>`;
 	    domString +=    `<p>${weatherArray[i].temp}</p>`;
@@ -95,22 +93,27 @@ const fiveForecast = (forecastArray, days) => { console.log(forecastArray, days)
 	if (days === 3 ) {
 		stop = 32;
 	}
-	for(let i = 8; i < stop; i=i+8) {
+	for(let i = 0; i < stop; i=i+9) {
 		console.log(forecastArray[i].dt_txt.slice(0, 10));
 // 		forecastArray[i].dt_txt
-						
-		forString += `<div class="col-sm-6 col-md-4 ">`;
+		// if(i % 3 === 0) {
+		// 	forString += `<div class="row">`;
+		// }
+		forString += `<div class="col-sm-6 col-md-4 savedWeatherForecasts">`;
 	    forString += 	`<div class="thumbnail">`;  
 	    forString +=  		`<div class="caption">`;
-	    forString += 			`<p>${forecastArray[i].dt_txt.slice(0, 10)}</p>`;
-	    forString += 			`<p>Temp: ${forecastArray[i].main.temp} degrees</p>`;
-	    forString += 			`<p>Conditions: ${forecastArray[i].weather[0].main}</p>`;
-	    forString += 			`<p>Pressure: ${forecastArray[i].main.pressure}</p>`;
-	    forString +=			`<p>Wind:${forecastArray[i].wind.speed} mph</p>`;
-	    forString += 		 `</div>`;
+	    forString += 			`<p class="date">${forecastArray[i].dt_txt.slice(0, 10)}</p>`;
+	    forString += 			`<p class="temp">Temp: ${forecastArray[i].main.temp} degrees</p>`;
+	    forString += 			`<p class="conditions">Conditions: ${forecastArray[i].weather[0].main}</p>`;
+	    forString += 			`<p class="airPressure">Pressure: ${forecastArray[i].main.pressure}</p>`;
+	    forString +=			`<p class="wind">Wind:${forecastArray[i].wind.speed} mph</p>`;
+	    forString += 		 	`<p >`;
+	    forString +=				`<button type="button" class="weatherHolder btn btn-primary btn-xs">Save Forecast</button>`;
+	    forString +=		 	`</p>`;
 	    forString +=  	`</div>`;
 	    forString +=  `</div>`;
-	    // forString +=  `</div>`;
+	    forString +=  `</div>`;
+	    // forString += `</div>`;
 	 }
 	
 		printToDom2(forString);
@@ -193,6 +196,7 @@ const googleAuth = () => {
 			console.log("error in authenticateGoogle", err);
 		});
 	});
+	// showFrontPage();
 };
 
 const createUser = () => {
@@ -213,7 +217,58 @@ const signInUser = () => {
   // var errorCode = error.code;
   // var errorMessage = error.message;
   // ...
-});
+		});
+		
+	});
+	
+};
+
+
+const showFrontPage = () => {
+	$('body').on('click', '#authScreen', () => {
+			// if (googleAuth === true) {
+			// 	console.log("fuckign works!!!!");
+			$('#frontZipBox').removeClass("hide");
+			$('#frontSubmitBox').removeClass("hide");
+			$('#frontDayForcastButtons').removeClass("hide");
+			$('#emlPswd').addClass('hide');
+			$('#authScreen').addClass("hide");
+	});
+};
+
+
+
+
+const savedForecasts = () => {
+	$('body').on('click', '.weatherHolder', (e) => {
+		let weather = e.target.closest('dom.savedWeatherForecasts');
+
+		let newWeather = {
+			"date": $(weather).find('.date').html(),
+			"temp": $(weather).find('.temp').html(),
+			"wind speed": $(weather).find('.conditions').html(),
+			"pressure": $(weather).find('.airPressure').html(),
+			"isWatched": $(weather).find('.wind').html(),
+			"Uid": ""
+		};
+
+		firebaseApi.saveWeather(newWeather).then(() =>{
+			$(weather).remove();
+		}).catch((err) =>{
+			console.log("error in weather saving", err);
+		});
+	});
+};
+
+const showSavedWeather = () => {
+	$('body').on('click', '#authenticate', () => {
+			$('#frontZipBox').addClass("hide");
+			$('#frontSubmitBox').addClass("hide");
+			$('#frontDayForcastButtons').addClass("hide");
+			$('#emlPswd').addClass('hide');
+			$('#authScreen').addClass("hide");
+			$('#localWeather').addClass("hide");
+			$('#futureForecast').removeClass('hide');
 	});
 };
 
@@ -224,11 +279,14 @@ const init = () =>{
 	threeDayForecast();
 	googleAuth();
 	createUser();
-	signInUser()
-;	
+	signInUser();
+	showFrontPage();
+	savedForecasts();	
+	showSavedWeather();
 };
 
 module.exports = {init};
+
 
 },{"./dom":2,"./firebaseApi":4,"./tmdb":6}],4:[function(require,module,exports){
 "use strict";
@@ -263,11 +321,11 @@ let authenticateGoogle = () => {
 let authenticateEmail = () => {
 	let email = $("#emailInput").val();
 	let password = $("#passwordInput").val();
-	let createUserWithEmailAndPassword = (email, password);
+	// let createUserWithEmailAndPassword = (email, password);
 
 	return new Promise((resolve, reject) => {
-	  var provider = new firebase.auth().createUserWithEmailAndPassword(email, password);
-	  firebase.auth().signInWithEmailAndPassword(email,password)
+	  var provider = new firebase.auth().createUserWithEmailAndPassword(email, password)
+	  // firebase.auth().signInWithEmailAndPassword(provider)
 
 	    .then((authData) => {
 	    	userUid = authData.user.uid;
@@ -298,14 +356,25 @@ let authenticateSignIn = () => {
 	});
 };
 
-// firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-//   // Handle Errors here.
-//   var errorCode = error.code;
-//   var errorMessage = error.message;
-//   // ...
-// });
+const saveWeather = (weather) => {
+	weather.uid = userUid;
+	return new Promise((resolve, reject) =>{
+		$.ajax({
+			method: "POST",
+			url: `${firebaseKey.databaseURL}/weather.json`,
+			data: JSON.stringify(weather)
+		}).then((result) => {
+			resolve(result);
+			console.log("freaking work");
+		}).catch((error) => {
+			reject(error);
+		});
+	});
+};
 
-module.exports = {setKey, authenticateGoogle, authenticateEmail, authenticateSignIn};
+
+
+module.exports = {setKey, authenticateGoogle, authenticateEmail, authenticateSignIn, saveWeather};
 
 },{}],5:[function(require,module,exports){
 

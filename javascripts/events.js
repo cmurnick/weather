@@ -63,6 +63,7 @@ const googleAuth = () => {
 			console.log("error in authenticateGoogle", err);
 		});
 	});
+	// showFrontPage();
 };
 
 const createUser = () => {
@@ -83,7 +84,58 @@ const signInUser = () => {
   // var errorCode = error.code;
   // var errorMessage = error.message;
   // ...
-});
+		});
+		
+	});
+	
+};
+
+
+const showFrontPage = () => {
+	$('body').on('click', '#authScreen', () => {
+			// if (googleAuth === true) {
+			// 	console.log("fuckign works!!!!");
+			$('#frontZipBox').removeClass("hide");
+			$('#frontSubmitBox').removeClass("hide");
+			$('#frontDayForcastButtons').removeClass("hide");
+			$('#emlPswd').addClass('hide');
+			$('#authScreen').addClass("hide");
+	});
+};
+
+
+
+
+const savedForecasts = () => {
+	$('body').on('click', '.weatherHolder', (e) => {
+		let weather = e.target.closest('dom.savedWeatherForecasts');
+
+		let newWeather = {
+			"date": $(weather).find('.date').html(),
+			"temp": $(weather).find('.temp').html(),
+			"wind speed": $(weather).find('.conditions').html(),
+			"pressure": $(weather).find('.airPressure').html(),
+			"isWatched": $(weather).find('.wind').html(),
+			"Uid": ""
+		};
+
+		firebaseApi.saveWeather(newWeather).then(() =>{
+			$(weather).remove();
+		}).catch((err) =>{
+			console.log("error in weather saving", err);
+		});
+	});
+};
+
+const showSavedWeather = () => {
+	$('body').on('click', '#authenticate', () => {
+			$('#frontZipBox').addClass("hide");
+			$('#frontSubmitBox').addClass("hide");
+			$('#frontDayForcastButtons').addClass("hide");
+			$('#emlPswd').addClass('hide');
+			$('#authScreen').addClass("hide");
+			$('#localWeather').addClass("hide");
+			$('#futureForecast').removeClass('hide');
 	});
 };
 
@@ -94,8 +146,11 @@ const init = () =>{
 	threeDayForecast();
 	googleAuth();
 	createUser();
-	signInUser()
-;	
+	signInUser();
+	showFrontPage();
+	savedForecasts();	
+	showSavedWeather();
 };
 
 module.exports = {init};
+
